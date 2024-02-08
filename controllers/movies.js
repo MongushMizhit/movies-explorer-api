@@ -4,10 +4,21 @@ const ForbiddenError = require('../errors/forbidden-err');
 const NotFoundError = require('../errors/not-found-err');
 
 const getMovie = (req, res, next) => {
-  Movie.find({})
-    .then((movies) => res.send(movies))
+  const userId = req.user._id;
+
+  Movie.find({ owner: userId })
+    .then((movies) => {
+      if (movies.length === 0) {
+        throw new NotFoundError('Фильмы не найдены');
+      }
+      res.send(movies);
+    })
     .catch((err) => {
-      next((err));
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Некорректные данные'));
+      } else {
+        next(err);
+      }
     });
 };
 

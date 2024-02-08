@@ -66,7 +66,9 @@ const updateUser = (req, res, next) => {
       res.status(200).json(user);
     })
     .catch((err) => {
-      if (err.name === 'DocumentNotFoundError') {
+      if (err.code === 11000) {
+        next(new ConflictError('Пользователь с таким email уже зарегестрирован'));
+      } else if (err.name === 'DocumentNotFoundError') {
         next(new NotFoundError('Пользователь с указанным _id не найден'));
       } else if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные при обновлении профиля'));

@@ -3,11 +3,10 @@ const { updateUserValidation } = require('../errors/validation');
 const {
   getCurrentUser, updateUser,
 } = require('../controllers/users');
-const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
-router.get('/me', auth, getCurrentUser);
-router.patch('/me', auth, updateUserValidation, updateUser);
+router.get('/me', getCurrentUser);
+router.patch('/me', updateUserValidation, updateUser);
 
 module.exports = router;
