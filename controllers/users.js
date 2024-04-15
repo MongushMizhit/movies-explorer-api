@@ -45,9 +45,9 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь с таким email уже зарегестрирован'));
+        next(new ConflictError('Пользователь с таким email уже существует'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+        next(new BadRequestError('При регистрации пользователя произошла ошибка'));
       } else {
         next(err);
       }
@@ -67,13 +67,13 @@ const updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError('Пользователь с таким email уже зарегестрирован'));
+        next(new ConflictError('Пользователь с таким email уже существует'));
       } else if (err.name === 'DocumentNotFoundError') {
         next(new NotFoundError('Пользователь с указанным _id не найден'));
       } else if (err.name === 'CastError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении профиля'));
+        next(new BadRequestError('При обновлении профиля произошла ошибка'));
       } else if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при обновлении профиля'));
+        next(new BadRequestError('При обновлении профиля произошла ошибка'));
       } else {
         next(err);
       }
